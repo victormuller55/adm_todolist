@@ -1,61 +1,52 @@
-import 'package:adm_todolist/app/pages/home/home_bloc.dart';
-import 'package:adm_todolist/app/pages/home/home_event.dart';
-import 'package:adm_todolist/app/pages/home/home_page.dart';
-import 'package:adm_todolist/app/pages/home/home_state.dart';
+import 'package:adm_todolist/app/bloc/task_bloc.dart';
+import 'package:adm_todolist/app/bloc/task_event.dart';
+import 'package:adm_todolist/app/bloc/task_state.dart';
 import 'package:adm_todolist/app/widgets/scaffold.dart';
+import 'package:adm_todolist/app/widgets/sized_box.dart';
 import 'package:adm_todolist/app/widgets/text.dart';
 import 'package:adm_todolist/const/colors.dart';
 import 'package:adm_todolist/data/model/task_model.dart';
+import 'package:adm_todolist/functions/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibration/vibration.dart';
+import 'package:adm_todolist/generated/l10n.dart';
 
 class FormTaskPage extends StatefulWidget {
   final TaskModel? taskModel;
-  final HomeBloc homeBloc;
+  final TaskBloc taskBloc;
 
-  const FormTaskPage({super.key, required this.homeBloc, this.taskModel});
+  const FormTaskPage({super.key, required this.taskBloc, this.taskModel});
 
   @override
   State<FormTaskPage> createState() => _FormTaskPageState();
 }
 
 class _FormTaskPageState extends State<FormTaskPage> {
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descricaoController = TextEditingController();
 
-  void _errorFeedback() async {
+  void _vibrateError() async {
     if (await Vibration.hasVibrator()) {
       Vibration.vibrate(pattern: [0, 50, 50, 50, 50, 50]);
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    if(widget.taskModel != null) {
+  void _addDataForms() {
+    if (widget.taskModel != null) {
       titleController.text = widget.taskModel!.title;
       descricaoController.text = widget.taskModel!.description;
     }
-
   }
 
-  void _onChangeState(HomeState state) {
-    if(state is HomeSuccessState) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Tarefa cadastrada com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+  void _onChangeState(TaskState state) {
+    if (state is TaskSuccessState) {
+      showSnackBar(context, text: S.of(context).taskSavedSuccessfully);
+      Navigator.pop(context);
     }
   }
-
 
   void _save() {
     if (_formKey.currentState!.validate()) {
@@ -68,81 +59,108 @@ class _FormTaskPageState extends State<FormTaskPage> {
       taskModel.title = titleController.value.text;
       taskModel.description = descricaoController.value.text;
 
-      widget.homeBloc.add(HomeAddUpdateEvent(taskModel: taskModel));
+      widget.taskBloc.add(TaskAddUpdateEvent(taskModel: taskModel));
     } else {
-      _errorFeedback();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Preencha todos os campos obrigatórios'),
-          backgroundColor: Colors.red,
-        ),
+      _vibrateError();
+      showSnackBar(
+        context,
+        text: S.of(context).fillAllRequiredFields,
+        color: Colors.orange,
       );
     }
   }
 
-  Widget _body() {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: [
-            TextFormField(
-              controller: titleController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Campo obrigatório';
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                label: appText('Titulo da Tarefa'),
-                filled: true,
-              ),
-            ),
-            SizedBox(height: 10),
-            TextFormField(
-              controller: descricaoController,
-              maxLines: 5,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Campo obrigatório';
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                label: appText('Descrição da Tarefa'),
-                filled: true,
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _save(),
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(double.infinity, 50),
-                backgroundColor: AppColors.getPrimaryColor(context),
-              ),
-              child: appText(
-                'Salvar Tarefa'.toUpperCase(),
-                color: Colors.white,
-                bold: true,
-              ),
-            ),
-          ],
-        ),
+  String? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return S.of(context).requiredField;
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _addDataForms();
+  }
+
+  Widget _formText({
+    required TextEditingController controller,
+    required String title,
+    bool? extended,
+  }) {
+    return TextFormField(
+      controller: controller,
+      validator: (value) => validator(value),
+      maxLines: extended ?? false ? 5 : null,
+      decoration: InputDecoration(label: appText(title), filled: true),
+    );
+  }
+
+  Widget _infoCadastroTarefas() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 5),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      width: double.infinity,
+      padding: EdgeInsets.all(15),
+      child: appText(
+        S.of(context).taskInfoDescriptionPage,
+        textAlign: TextAlign.center,
       ),
     );
   }
 
+  Widget _form() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        spacing: 10,
+        children: [
+          _formText(title: S.of(context).taskTitle, controller: titleController),
+          _formText(
+            title: S.of(context).taskDescription,
+            controller: descricaoController,
+            extended: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _body() {
+    return ListView(
+      padding: EdgeInsets.all(10),
+      children: [
+        _infoCadastroTarefas(),
+        appSizedBox(height: 10),
+        _form(),
+        appSizedBox(height: 10),
+        ElevatedButton(
+          onPressed: () => _save(),
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(double.infinity, 50),
+            backgroundColor: AppColors.getPrimaryColor(context),
+          ),
+          child: appText(
+            S.of(context).saveTask.toUpperCase(),
+            color: Colors.white,
+            bold: true,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _bodyBuilder() {
-    return BlocConsumer<HomeBloc, HomeState>(
-      bloc: widget.homeBloc,
+    return BlocConsumer<TaskBloc, TaskState>(
+      bloc: widget.taskBloc,
       listener: (context, state) => _onChangeState(state),
       builder: (context, state) {
         switch (state.runtimeType) {
-          case const (HomeLoadingState):
-            return CircularProgressIndicator();
+          case const (TaskLoadingState):
+            return Center(child: CircularProgressIndicator());
           default:
             return _body();
         }
@@ -152,6 +170,13 @@ class _FormTaskPageState extends State<FormTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    return appScaffold(context, title: 'Cadastrar Novo', body: _bodyBuilder());
+    return Hero(
+      tag: 'floating-page',
+      child: appScaffold(
+        context,
+        title: S.of(context).registerNew,
+        body: _bodyBuilder(),
+      ),
+    );
   }
 }

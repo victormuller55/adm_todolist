@@ -6,6 +6,7 @@ void showModal(
   required String title,
   required String description,
   required String titleButtonConfirm,
+  Color? colorButtonConfirm,
   required void Function() actionButtonConfirm,
 }) {
   showDialog(
@@ -17,14 +18,14 @@ void showModal(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: appText('Cancelar'),
+            child: appText('Cancel'),
           ),
           TextButton(
-            onPressed: ()  {
+            onPressed: () {
               Navigator.pop(context);
               actionButtonConfirm();
             },
-            child: appText(titleButtonConfirm),
+            child: appText(titleButtonConfirm, color: colorButtonConfirm),
           ),
         ],
       );

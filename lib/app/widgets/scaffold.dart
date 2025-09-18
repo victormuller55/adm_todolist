@@ -13,11 +13,9 @@ Widget appScaffold(
     body: body,
     floatingActionButton: floatingActionButton,
     appBar: AppBar(
+      centerTitle: true,
       backgroundColor: AppColors.getPrimaryColor(context),
       actions: action != null ? [action] : null,
-      iconTheme: const IconThemeData(
-        color: Colors.white, // seta de voltar branca
-      ),
       title: appText(
         title.toUpperCase(),
         color: Colors.white,
@@ -25,6 +23,5 @@ Widget appScaffold(
         fontSize: 15,
       ),
     ),
-
   );
 }
