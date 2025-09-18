@@ -8,8 +8,6 @@ import '../generated/l10n.dart';
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -20,21 +18,17 @@ class _MyAppState extends State<MyApp> {
   Locale _locale = const Locale('pt');
 
   void toggleTheme(bool isDark) {
-    setState(() {
-      themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    });
+    setState(() => themeMode = isDark ? ThemeMode.dark : ThemeMode.light);
   }
 
   void changeLocale(String languageCode) {
-    setState(() {
-      _locale = Locale(languageCode);
-    });
+    setState(() => _locale = Locale(languageCode));
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ADM TodoList',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
