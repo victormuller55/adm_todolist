@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
+    fontFamily: 'Roboto',
+    focusColor: AppColors.primaryLight,
     brightness: Brightness.light,
     primaryColor: AppColors.primaryLight,
     scaffoldBackgroundColor: AppColors.backgroundLight,
@@ -28,6 +30,8 @@ class AppTheme {
   );
 
   static ThemeData darkTheme = ThemeData(
+    fontFamily: 'Roboto',
+    focusColor: AppColors.primaryDark,
     brightness: Brightness.dark,
     primaryColor: AppColors.primaryDark,
     switchTheme: SwitchThemeData(

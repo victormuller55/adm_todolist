@@ -14,6 +14,7 @@ Widget appText(
     textAlign: textAlign ?? TextAlign.start,
     maxLines: maxLines,
     style: TextStyle(
+      fontFamily: 'Roboto',
       color: color,
       fontSize: fontSize,
       overflow: overflow ?? false ? TextOverflow.ellipsis : null,

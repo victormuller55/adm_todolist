@@ -7,10 +7,10 @@ import 'package:adm_todolist/app/widgets/text.dart';
 import 'package:adm_todolist/const/colors.dart';
 import 'package:adm_todolist/data/model/task_model.dart';
 import 'package:adm_todolist/functions/functions.dart';
+import 'package:adm_todolist/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibration/vibration.dart';
-import 'package:adm_todolist/generated/l10n.dart';
 
 class FormTaskPage extends StatefulWidget {
   final TaskModel? taskModel;
@@ -92,7 +92,10 @@ class _FormTaskPageState extends State<FormTaskPage> {
       controller: controller,
       validator: (value) => validator(value),
       maxLines: extended ?? false ? 5 : null,
-      decoration: InputDecoration(label: appText(title), filled: true),
+      decoration: InputDecoration(
+        label: appText(title),
+        border: OutlineInputBorder(),
+      ),
     );
   }
 
@@ -106,7 +109,7 @@ class _FormTaskPageState extends State<FormTaskPage> {
       width: double.infinity,
       padding: EdgeInsets.all(15),
       child: appText(
-        S.of(context).taskInfoDescriptionPage,
+        S.of(context).taskInfoDescriptionForm,
         textAlign: TextAlign.center,
       ),
     );
@@ -118,7 +121,10 @@ class _FormTaskPageState extends State<FormTaskPage> {
       child: Column(
         spacing: 10,
         children: [
-          _formText(title: S.of(context).taskTitle, controller: titleController),
+          _formText(
+            title: S.of(context).taskTitle,
+            controller: titleController,
+          ),
           _formText(
             title: S.of(context).taskDescription,
             controller: descricaoController,
@@ -140,11 +146,15 @@ class _FormTaskPageState extends State<FormTaskPage> {
         ElevatedButton(
           onPressed: () => _save(),
           style: ElevatedButton.styleFrom(
+            elevation: 2,
             fixedSize: Size(double.infinity, 50),
             backgroundColor: AppColors.getPrimaryColor(context),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
           child: appText(
-            S.of(context).saveTask.toUpperCase(),
+            S.of(context).saveTask,
             color: Colors.white,
             bold: true,
           ),

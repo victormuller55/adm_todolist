@@ -10,9 +10,9 @@ import 'package:adm_todolist/app/widgets/text.dart';
 import 'package:adm_todolist/const/colors.dart';
 import 'package:adm_todolist/data/model/task_model.dart';
 import 'package:adm_todolist/functions/functions.dart';
+import 'package:adm_todolist/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:adm_todolist/generated/l10n.dart';
 
 class TaskPage extends StatefulWidget {
   final void Function(bool) onChangeDarkMode;
@@ -104,29 +104,25 @@ class _TaskPageState extends State<TaskPage> {
   Widget _headerCard(TaskModel task, void Function() onChangeStatus) {
     return Row(
       children: [
-        Expanded(
-          child: appText(
-            task.title,
-            fontSize: 20,
-            overflow: true,
-          ),
-        ),
-        ActionChip(
-          onPressed: onChangeStatus,
-          avatar: Checkbox(
-            value: task.status,
-            onChanged: (value) => {},
-            activeColor: Colors.green.shade700,
-          ),
-          label: appText(
-            task.status ? S.of(context).completed : S.of(context).pending,
-            bold: true,
-            color: Theme.of(context).brightness == Brightness.light && !task.status
-                ? Colors.grey.shade700
-                : Colors.white,
-          ),
-          color: WidgetStateProperty.all(
-            task.status ? Colors.green : Theme.of(context).cardColor,
+        Expanded(child: appText(task.title, fontSize: 20, overflow: true)),
+        appSizedBox(width: 20),
+        SizedBox(
+          child: ActionChip(
+            onPressed: onChangeStatus,
+            avatar: Icon(
+              task.status ? Icons.check_box : Icons.access_time_outlined,
+              color: task.status ? Colors.white : Colors.grey.shade600,
+            ),
+            label: appText(
+              task.status ? S.of(context).completed : S.of(context).pending,
+              color:
+                  Theme.of(context).brightness == Brightness.light && !task.status
+                  ? Colors.grey.shade700
+                  : Colors.white,
+            ),
+            color: WidgetStateProperty.all(
+              task.status ? Colors.green : Theme.of(context).cardColor,
+            ),
           ),
         ),
       ],
@@ -138,23 +134,13 @@ class _TaskPageState extends State<TaskPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       spacing: 10,
       children: [
-        ElevatedButton(
+        TextButton(
           onPressed: () => showModelDelete(task.id),
-          style: ElevatedButton.styleFrom(
-            fixedSize: Size(100, 10),
-            padding: EdgeInsets.zero,
-            backgroundColor: Colors.red,
-          ),
-          child: appText(S.of(context).delete, bold: true, color: Colors.white),
+          child: appText(S.of(context).delete, bold: true, color: AppColors.getTextColor(context)),
         ),
         ElevatedButton(
           onPressed: () => _onPressedEditar(task),
-          style: ElevatedButton.styleFrom(
-            fixedSize: Size(100, 10),
-            padding: EdgeInsets.zero,
-            backgroundColor: AppColors.getPrimaryColor(context),
-          ),
-          child: appText(S.of(context).edit, bold: true, color: Colors.white),
+          child: appText(S.of(context).edit, bold: true, color: AppColors.getTextColor(context)),
         ),
       ],
     );
@@ -168,6 +154,7 @@ class _TaskPageState extends State<TaskPage> {
         }
 
         return Card(
+          color: Theme.of(context).cardColor,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
@@ -187,17 +174,20 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Widget _infoTarefas() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 5),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: double.infinity,
-      padding: EdgeInsets.all(15),
-      child: appText(
-        S.of(context).taskInfoDescriptionPage,
-        textAlign: TextAlign.center,
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 5),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        width: double.infinity,
+        padding: EdgeInsets.all(15),
+        child: appText(
+          S.of(context).taskInfoDescriptionPage,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -213,10 +203,7 @@ class _TaskPageState extends State<TaskPage> {
       return _nenhumItemEncontrado();
     }
 
-    return Padding(
-      padding: EdgeInsets.all(10),
-      child: ListView(children: [_infoTarefas(), ...items]),
-    );
+    return ListView(children: [_infoTarefas(), ...items]);
   }
 
   Widget _bodyBuilder() {
@@ -238,11 +225,17 @@ class _TaskPageState extends State<TaskPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        FloatingActionButton(
+        FloatingActionButton.extended(
           heroTag: 'floating-page',
           onPressed: () => _onPressedAddTask(),
           backgroundColor: AppColors.getSecondaryColor(context),
-          child: Icon(Icons.add, color: Colors.white),
+          label: Row(
+            children: [
+              appText('Nota Tarefa', color: Colors.white),
+              appSizedBox(width: 10),
+              Icon(Icons.add, color: Colors.white),
+            ],
+          ),
         ),
         appSizedBox(width: 10),
         FloatingActionButton(
@@ -257,7 +250,7 @@ class _TaskPageState extends State<TaskPage> {
           ),
           backgroundColor: AppColors.getSecondaryColor(context),
           child: Icon(Icons.settings, color: Colors.white),
-        )
+        ),
       ],
     );
   }
