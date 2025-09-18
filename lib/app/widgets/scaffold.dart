@@ -19,7 +19,7 @@ Widget appScaffold(
         color: Colors.white, // seta de voltar branca
       ),
       title: appText(
-        'Titulo da tarefa'.toUpperCase(),
+        title.toUpperCase(),
         color: Colors.white,
         bold: true,
         fontSize: 15,

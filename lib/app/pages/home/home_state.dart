@@ -3,23 +3,27 @@ import 'package:adm_todolist/data/model/task_model.dart';
 
 abstract class HomeState {
   ErrorModel errorModel;
-  List<TaskModel> taskModel;
+  List<TaskModel> taskList;
 
-  HomeState({required this.taskModel, required this.errorModel});
+  HomeState({required this.taskList, required this.errorModel});
 }
 
 class HomeInitialState extends HomeState {
-  HomeInitialState() : super(taskModel: List.empty(), errorModel: ErrorModel.empty());
+  HomeInitialState() : super(taskList: List.empty(), errorModel: ErrorModel.empty());
 }
 
 class HomeLoadingState extends HomeState {
-  HomeLoadingState() : super(taskModel: List.empty(), errorModel: ErrorModel.empty());
+  HomeLoadingState() : super(taskList: List.empty(), errorModel: ErrorModel.empty());
 }
 
 class HomeSuccessState extends HomeState {
-  HomeSuccessState({required super.taskModel}) : super(errorModel: ErrorModel.empty());
+  HomeSuccessState({required super.taskList}) : super(errorModel: ErrorModel.empty());
+}
+
+class HomeDeleteSuccessState extends HomeState {
+  HomeDeleteSuccessState({required super.taskList}) : super(errorModel: ErrorModel.empty());
 }
 
 class HomeErrorState extends HomeState {
-  HomeErrorState({required super.errorModel}) : super(taskModel: List.empty());
+  HomeErrorState({required super.errorModel}) : super(taskList: List.empty());
 }
