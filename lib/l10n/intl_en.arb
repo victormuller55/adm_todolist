@@ -20,5 +20,6 @@
   "noTasksFound": "No tasks found.",
   "completed": "Completed",
   "pending": "Pending",
+  "newTask": "New Task",
   "taskInfoDescriptionPage": "On this screen you can view your tasks. Click the pending button to mark your task as completed. You can also delete or edit your task."
 }

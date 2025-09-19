@@ -20,5 +20,6 @@
   "noTasksFound": "Nenhuma tarefa encontrada.",
   "completed": "Concluído",
   "pending": "Pendente",
+  "newTask": "Nova Tarefa",
   "taskInfoDescriptionPage": "Nesta tela você poderá visualizar suas tarefas, clicando no botão pendente você pode marcar sua tarefa como concluído, você também poderá excluir e editar sua tarefa."
 }

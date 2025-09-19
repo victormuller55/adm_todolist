@@ -8,7 +8,9 @@ import 'package:adm_todolist/app/widgets/scaffold.dart';
 import 'package:adm_todolist/app/widgets/sized_box.dart';
 import 'package:adm_todolist/app/widgets/text.dart';
 import 'package:adm_todolist/const/colors.dart';
+import 'package:adm_todolist/data/datasource/task_data_dource.dart';
 import 'package:adm_todolist/data/model/task_model.dart';
+import 'package:adm_todolist/data/repository/task_repository.dart';
 import 'package:adm_todolist/functions/functions.dart';
 import 'package:adm_todolist/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,8 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  final TaskBloc _bloc = TaskBloc();
+
+  final _bloc = TaskBloc(TaskRepository(TaskDataSource()));
 
   @override
   void initState() {
@@ -60,7 +63,7 @@ class _TaskPageState extends State<TaskPage> {
 
   void _onChangeStatus(TaskModel task) {
     task.status = !task.status;
-    _bloc.add(TaskAddUpdateEvent(taskModel: task));
+    _bloc.add(TaskAddUpdateEvent(task: task));
   }
 
   void _onDeleteTask(int id) {
@@ -226,12 +229,13 @@ class _TaskPageState extends State<TaskPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         FloatingActionButton.extended(
+          key: const Key('openNewTask'),
           heroTag: 'floating-page',
           onPressed: () => _onPressedAddTask(),
           backgroundColor: AppColors.getSecondaryColor(context),
           label: Row(
             children: [
-              appText('Nota Tarefa', color: Colors.white),
+              appText(S.of(context).newTask, color: Colors.white),
               appSizedBox(width: 10),
               Icon(Icons.add, color: Colors.white),
             ],

@@ -32,6 +32,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "fillAllRequiredFields": MessageLookupByLibrary.simpleMessage(
             "Preencha todos os campos obrigatórios"),
         "language": MessageLookupByLibrary.simpleMessage("Idioma"),
+        "newTask": MessageLookupByLibrary.simpleMessage("Nova Tarefa"),
         "noTasksFound":
             MessageLookupByLibrary.simpleMessage("Nenhuma tarefa encontrada."),
         "pending": MessageLookupByLibrary.simpleMessage("Pendente"),

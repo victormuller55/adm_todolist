@@ -59,7 +59,7 @@ class _FormTaskPageState extends State<FormTaskPage> {
       taskModel.title = titleController.value.text;
       taskModel.description = descricaoController.value.text;
 
-      widget.taskBloc.add(TaskAddUpdateEvent(taskModel: taskModel));
+      widget.taskBloc.add(TaskAddUpdateEvent(task: taskModel));
     } else {
       _vibrateError();
       showSnackBar(

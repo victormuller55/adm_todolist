@@ -250,6 +250,16 @@ class S {
     );
   }
 
+  /// `New Task`
+  String get newTask {
+    return Intl.message(
+      'New Task',
+      name: 'newTask',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `On this screen you can view your tasks. Click the pending button to mark your task as completed. You can also delete or edit your task.`
   String get taskInfoDescriptionPage {
     return Intl.message(

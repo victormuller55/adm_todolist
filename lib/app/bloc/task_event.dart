@@ -1,15 +1,15 @@
 import 'package:adm_todolist/data/model/task_model.dart';
 
-abstract class HomeEvent {}
+abstract class TaskEvent {}
 
-class TaskLoadEvent extends HomeEvent {}
+class TaskLoadEvent extends TaskEvent {}
 
-class TaskAddUpdateEvent extends HomeEvent {
-  TaskModel taskModel;
-  TaskAddUpdateEvent({required this.taskModel});
+class TaskAddUpdateEvent extends TaskEvent {
+  TaskModel task;
+  TaskAddUpdateEvent({required this.task});
 }
 
-class TaskDeleteEvent extends HomeEvent {
+class TaskDeleteEvent extends TaskEvent {
   int id;
   TaskDeleteEvent({required this.id});
 }

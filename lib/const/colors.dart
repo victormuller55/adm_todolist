@@ -6,7 +6,7 @@ class AppColors {
   static const Color primaryDark = Color.fromRGBO(35, 76, 94, 1.0);
 
   static final Color backgroundLight = Colors.grey.shade100;
-  static final Color backgroundDark = Colors.black;
+  static final Color backgroundDark = Colors.grey.shade900;
 
   static final Color cardLight = Colors.grey.shade200;
   static final Color cardDark = Colors.grey.shade900;
